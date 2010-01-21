@@ -19,63 +19,114 @@
 ;; MA 02111-1307 USA
 
 (require 'my/window)
+(require 'my/edges)
+
+(defun my-frame-serialize-split (split)
+	"Replaces window objects with window serialization.
+	Function is firstly invoked by `my-frame-serialize'.
+	SPLIT is split information output by `window-tree'."
+	(if (windowp split)
+		(my-window-serialize split)
+		(let ((index 2) (length (length split)))
+			(while (< index length)
+				(setf (nth index split) (my-frame-serialize-split (nth index split)))
+				(setq index (+ index 1)))
+			split)))
 
 (defun my-frame-serialize (&optional frame)
+	"Serializes FRAME windows configuration to string.
+	It's helpful when we want to save configuration to file.
+	If FRAME is nil then current frame is serialized."
 	(list
 		(list 'left (frame-parameter frame 'left))
 		(list 'top (frame-parameter frame 'top))
 		(list 'height (frame-parameter frame 'height))
 		(list 'width (frame-parameter frame 'width))
-		(list 'windows
-			(let* (
-					(first-window (frame-first-window frame))
-					(current-window first-window)
-					(windows (list (my-window-serialize current-window))))
+		(list 'tree (my-frame-serialize-split (car (window-tree frame))))))
 
-				(while
-					(not
-						(eq first-window
-							(setq current-window (next-window current-window))))
-					(nconc windows (list (my-window-serialize current-window))))
-				windows))))
+(defun my-frame-unserialize-split (split &optional window h-factor w-factor)
+	"Unserializes SPLIT into given WINDOW.
+	Function is firstly invoked by `my-frame-unserialize'."
+	(if (not window)
+		(setq window (selected-window)))
+	(if (not h-factor)
+		(setq h-factor 1))
+	(if (not w-factor)
+		(setq w-factor 1))
+	(let ((queue (list t)) (index 3) (length (length split)) (edges (window-edges window)))
+		(if (or (not (car split)) (eq t (car split)))
+			(progn
+				; (message "ENLARGE HEIGHT: %S %S %S %S" h-factor (my-edges-height edges) (my-edges-height (second split)) (- (round (* h-factor (my-edges-height (second split)))) (my-edges-height edges)))
+				; (message "ENLARGE WIDTH: %S %S %S %S" w-factor (my-edges-width edges) (my-edges-width (second split)) (- (round (* w-factor (my-edges-width (second split)))) (my-edges-width edges)))
+				(ignore-errors (enlarge-window
+						(- (round (* h-factor
+								(my-edges-height (second split))))
+						(my-edges-height edges))))
+				(ignore-errors (enlarge-window-horizontally
+						(- (round (* w-factor
+								(my-edges-width (second split))))
+						(my-edges-width edges))))
+
+				(nconc queue (list (list (third split) window)))
+				(while (< index length)
+					(setq window (split-window window nil (not (car split))))
+					(nconc queue (list (list (nth index split) window)))
+					(setq index (+ index 1)))
+				(if (> (length queue) 1)
+					(progn
+						(pop queue)
+						(dolist (data queue)
+							(select-window (second data))
+							(my-frame-unserialize-split (car data) (second data) h-factor w-factor)))))
+
+			; (message "ENLARGE HEIGHT: %S %S %S %S" h-factor (my-edges-height edges) (my-edges-height (second (assoc 'edges split))) (- (round (* h-factor (my-edges-height (second (assoc 'edges split))))) (my-edges-height edges)))
+			; (message "ENLARGE WIDTH: %S %S %S %S" w-factor (my-edges-width edges) (my-edges-width (second (assoc 'edges split))) (- (round (* w-factor (my-edges-width (second (assoc 'edges split))))) (my-edges-width edges)))
+			(ignore-errors (enlarge-window
+					(- (round (* h-factor (my-edges-height (second (assoc 'edges split)))))
+						(my-edges-height edges))))
+			(ignore-errors (enlarge-window-horizontally
+					(- (round (* w-factor (my-edges-width (second (assoc 'edges split)))))
+						(my-edges-width edges))))
+			(my-window-unserialize split window)
+			(if (second (assoc 'selected split))
+				(select-window window)))))
 
 (defun my-frame-unserialize (data &optional frame)
-	;; (message "--- UNSERIALIZE ---")
+	"Unserializes configuration saved by `my-frame-serialize' into FRAME.
+	DATA is configuration string. If FRAME is nil then current frame is taken."
 	(if (not frame)
 		(setq frame (window-frame (selected-window))))
 
+	(set-frame-width frame (second (assoc 'width data)))
+	(set-frame-height frame (second (assoc 'height data)))
 	(let* (
-			(h-factor (/ (float (frame-parameter frame 'height)) (second (assoc 'height data))))
-			(w-factor (/ (float (frame-parameter frame 'width)) (second (assoc 'width data))))
-			(first-window (frame-first-window frame))
-			(window first-window)
-			(windows-data (second (assoc 'windows data)))
-			previous
-			selected-window
+			(h-factor(/ (float (frame-parameter frame 'height))
+					(second (assoc 'height data))))
+			(w-factor (/ (float (frame-parameter frame 'width))
+					(second (assoc 'width data))))
+			(window (frame-first-window frame))
 			(selected-frame (window-frame (selected-window))))
 
-		(delete-other-windows first-window)
-		(dolist (current windows-data)
-			(if previous
-				(progn (split-window window nil (eq (second (second (assoc 'edges current))) (second (second (assoc 'edges previous)))))
-					(setq window (next-window window))))
-			(setq previous current))
-		(setq window first-window)
-
 		(select-frame frame)
-		(select-window first-window)
-		(dolist (current windows-data)
-			;; (message "ENLARGE HEIGHT: %S %S %S %S" h-factor (window-height) (second (assoc 'height current)) (- (* h-factor (second (assoc 'height current))) (window-height)))
-			;; (message "ENLARGE WIDTH: %S %S %S %S" w-factor (window-width) (second (assoc 'width current)) (- (* w-factor (second (assoc 'width current))) (window-width)))
-			(ignore-errors (enlarge-window
-				(- (round (* h-factor (second (assoc 'height current)))) (window-height))))
-			(ignore-errors (enlarge-window-horizontally
-				(- (round (* w-factor (second (assoc 'width current)))) (window-width))))
-			(my-window-unserialize current)
-			(if (second (assoc 'selected current))
-					(setq selected-window (selected-window)))
-			(select-window (next-window)))
-		(select-window selected-window)
+		(delete-other-windows window)
+		(my-frame-unserialize-split (second (assoc 'tree data)) window h-factor w-factor)
 		(select-frame selected-frame)))
+
+(defun my-frame-short-layout-info (&optional frame)
+	"Returns string with short FRAME layout info (concancenated edges).
+	Useful in debugging."
+	(if (not frame)
+		(setq frame (window-frame (selected-window))))
+	(let* (
+			(first-window (frame-first-window frame))
+			(window first-window)
+			(edges (window-edges window))
+			(data (concat (number-to-string (car edges)) "-" (number-to-string (second edges)) "-" (number-to-string (third edges)) "-" (number-to-string (fourth edges)))))
+		(while (not (eq (setq window (next-window window)) first-window))
+			(setq edges (window-edges window))
+			(setq data (concat data "|"
+					(number-to-string (car edges)) "-"
+					(number-to-string (second edges)) "-" (number-to-string (third edges)) "-" (number-to-string (fourth edges)))))
+		data))
 
 (provide 'my/frame)
