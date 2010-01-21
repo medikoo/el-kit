@@ -19,6 +19,9 @@
 ;; MA 02111-1307 USA
 
 (defun my-regexp-group (list)
+	"Returns regexp that is buld of strings in LIST.
+	Regexp will match any string found in a LIST.
+	This shortcut allows crating such regexps in more readable way."
 	(concat "\\(" (mapconcat 'identity list "\\)\\|\\(") "\\)"))
 
 (provide 'my/regexp)

@@ -19,6 +19,8 @@
 ;; MA 02111-1307 USA
 
 (defun my-file-write (file content &optional nowarn)
+	"Writes CONTENT to FILE.
+	If NOWARN is nil signal an error on failure."
 	(if (file-writable-p file)
 		(with-temp-buffer
 			(insert content)
@@ -27,6 +29,8 @@
 				nil (error "Could not write file"))))
 
 (defun my-file-read (file &optional nowarn)
+	"Returns FILE content as string.
+	If NOWARN is nil singal an error on failure."
 	(if (file-readable-p file)
 		(with-temp-buffer
 			(insert-file-contents file)

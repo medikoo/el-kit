@@ -19,13 +19,19 @@
 ;; MA 02111-1307 USA
 
 (defun my-list-replace (list search replace)
+	"In given LIST Replaces all instances of SEARCH with REPLACE."
 	(let ((index -1) (length (length list)))
 		(while (< (setq index (+ index 1)) length)
 			(if (eq search (nth index list))
 				(setf (nth index list) replace)))))
 
 (defun my-list-set (list replace)
+	"Makes given LIST content same as in REPLACE list.
+	Useful when we don't want to create new object
+	but keep references to existing one.
+	Returns LIST."
 	(setcar list (car replace))
-	(setcdr list (cdr replace)))
+	(setcdr list (cdr replace))
+	list)
 
 (provide 'my/list)

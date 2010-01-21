@@ -19,6 +19,9 @@
 ;; MA 02111-1307 USA
 
 (defun my-window-serialize (&optional window)
+	"Serializes WINDOW characterstic to string.
+	Useful when we want to keep such configuration in file between sessions.
+	If WINDOW is nil then current window is used."
 	(if (not window)
 		(setq window (selected-window)))
 	(let ((buffer (window-buffer window)))
@@ -33,6 +36,8 @@
 			(list 'display (list (window-start window) (window-end window))))))
 
 (defun my-window-unserialize (data &optional window)
+	"Unserializes WINDOW from DATA string (created by `my-window-unserialize').
+	If WINDOW is nil then current window is used."
 	(if (not window)
 		(setq window (selected-window)))
 	(set-window-buffer window
