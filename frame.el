@@ -44,29 +44,20 @@
 		(list 'width (frame-parameter frame 'width))
 		(list 'tree (my-frame-serialize-split (car (window-tree frame))))))
 
-(defun my-frame-unserialize-split (split &optional window h-factor w-factor)
+(defun my-frame-unserialize-split (split &optional window)
 	"Unserializes SPLIT into given WINDOW.
 	Function is firstly invoked by `my-frame-unserialize'."
 	(if (not window)
 		(setq window (selected-window)))
-	(if (not h-factor)
-		(setq h-factor 1))
-	(if (not w-factor)
-		(setq w-factor 1))
 	(let ((queue (list t)) (index 3) (length (length split)) (edges (window-edges window)))
 		(if (or (not (car split)) (eq t (car split)))
 			(progn
-				; (message "ENLARGE HEIGHT: %S %S %S %S" h-factor (my-edges-height edges) (my-edges-height (second split)) (- (round (* h-factor (my-edges-height (second split)))) (my-edges-height edges)))
-				; (message "ENLARGE WIDTH: %S %S %S %S" w-factor (my-edges-width edges) (my-edges-width (second split)) (- (round (* w-factor (my-edges-width (second split)))) (my-edges-width edges)))
 				(ignore-errors (enlarge-window
-						(- (round (* h-factor
-								(my-edges-height (second split))))
+						(- (my-edges-height (second split))
 						(my-edges-height edges))))
 				(ignore-errors (enlarge-window-horizontally
-						(- (round (* w-factor
-								(my-edges-width (second split))))
+						(- (my-edges-width (second split))
 						(my-edges-width edges))))
-
 				(nconc queue (list (list (third split) window)))
 				(while (< index length)
 					(setq window (split-window window nil (not (car split))))
@@ -77,15 +68,12 @@
 						(pop queue)
 						(dolist (data queue)
 							(select-window (second data))
-							(my-frame-unserialize-split (car data) (second data) h-factor w-factor)))))
-
-			; (message "ENLARGE HEIGHT: %S %S %S %S" h-factor (my-edges-height edges) (my-edges-height (second (assoc 'edges split))) (- (round (* h-factor (my-edges-height (second (assoc 'edges split))))) (my-edges-height edges)))
-			; (message "ENLARGE WIDTH: %S %S %S %S" w-factor (my-edges-width edges) (my-edges-width (second (assoc 'edges split))) (- (round (* w-factor (my-edges-width (second (assoc 'edges split))))) (my-edges-width edges)))
+							(my-frame-unserialize-split (car data) (second data))))))
 			(ignore-errors (enlarge-window
-					(- (round (* h-factor (my-edges-height (second (assoc 'edges split)))))
+					(- (my-edges-height (second (assoc 'edges split)))
 						(my-edges-height edges))))
 			(ignore-errors (enlarge-window-horizontally
-					(- (round (* w-factor (my-edges-width (second (assoc 'edges split)))))
+					(- (my-edges-width (second (assoc 'edges split)))
 						(my-edges-width edges))))
 			(my-window-unserialize split window)
 			(if (second (assoc 'selected split))
@@ -100,16 +88,11 @@
 	(set-frame-width frame (second (assoc 'width data)))
 	(set-frame-height frame (second (assoc 'height data)))
 	(let* (
-			(h-factor(/ (float (frame-parameter frame 'height))
-					(second (assoc 'height data))))
-			(w-factor (/ (float (frame-parameter frame 'width))
-					(second (assoc 'width data))))
 			(window (frame-first-window frame))
 			(selected-frame (window-frame (selected-window))))
-
 		(select-frame frame)
 		(delete-other-windows window)
-		(my-frame-unserialize-split (second (assoc 'tree data)) window h-factor w-factor)
+		(my-frame-unserialize-split (second (assoc 'tree data)) window)
 		(select-frame selected-frame)))
 
 (defun my-frame-short-layout-info (&optional frame)
