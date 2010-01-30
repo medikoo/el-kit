@@ -47,15 +47,16 @@
 	Function is firstly invoked by `my-frame-unserialize'."
 	(if (not window)
 		(setq window (selected-window)))
-	(let ((queue (list t)) (index 3) (length (length split)) (edges (window-edges window)))
+	(let ((queue (list t)) (index 3) (length (length split))
+			(edges (window-edges window)))
 		(if (or (not (car split)) (eq t (car split)))
 			(progn
 				(ignore-errors (enlarge-window
 						(- (my-edges-height (second split))
-						(my-edges-height edges))))
+							(my-edges-height edges))))
 				(ignore-errors (enlarge-window-horizontally
 						(- (my-edges-width (second split))
-						(my-edges-width edges))))
+							(my-edges-width edges))))
 				(nconc queue (list (list (third split) window)))
 				(while (< index length)
 					(setq window (split-window window nil (not (car split))))
@@ -102,12 +103,35 @@
 			(first-window (frame-first-window frame))
 			(window first-window)
 			(edges (window-edges window))
-			(data (concat (number-to-string (car edges)) "-" (number-to-string (second edges)) "-" (number-to-string (third edges)) "-" (number-to-string (fourth edges)))))
+			(data (concat
+					(number-to-string (car edges)) "-"
+					(number-to-string (second edges)) "-"
+					(number-to-string (third edges)) "-"
+					(number-to-string (fourth edges)))))
 		(while (not (eq (setq window (next-window window)) first-window))
 			(setq edges (window-edges window))
 			(setq data (concat data "|"
 					(number-to-string (car edges)) "-"
-					(number-to-string (second edges)) "-" (number-to-string (third edges)) "-" (number-to-string (fourth edges)))))
+					(number-to-string (second edges)) "-"
+					(number-to-string (third edges)) "-"
+					(number-to-string (fourth edges)))))
 		data))
+
+(defun my-frame-reasonable-split (&optional frame)
+	"Split FRAME into reasonable number of windows.
+	Reasonable is that each window has at least 90 characters in width."
+	(if (not frame)
+		(setq frame (window-frame (selected-window))))
+	(let* (
+			(window (frame-first-window frame))
+			(tree (car (window-tree frame)))
+			(to-split (- (floor (/ (frame-parameter frame 'width) 90))
+					(if (or (not (listp tree)) (car tree))
+						1
+						(- (length tree) 2)))))
+		(while (> to-split 0)
+			(split-window window nil t)
+			(setq to-split (- to-split 1)))
+		(balance-windows frame)))
 
 (provide 'my/frame)
