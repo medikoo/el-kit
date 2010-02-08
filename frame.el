@@ -16,8 +16,8 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-(require 'my/window)
-(require 'my/edges)
+(require 'my/window nil t)
+(require 'my/edges nil t)
 
 (defun my-frame-serialize-split (split)
 	"Replaces window objects with window serialization.
@@ -31,6 +31,7 @@
 				(setq index (+ index 1)))
 			split)))
 
+;;;###autoload
 (defun my-frame-serialize (&optional frame)
 	"Serializes FRAME windows configuration to string.
 	It's helpful when we want to save configuration to file.
@@ -78,6 +79,7 @@
 			(if (second (assoc 'selected split))
 				(select-window window)))))
 
+;;;###autoload
 (defun my-frame-unserialize (data &optional frame)
 	"Unserializes configuration saved by `my-frame-serialize' into FRAME.
 	DATA is configuration string. If FRAME is nil then current frame is taken."
@@ -94,6 +96,7 @@
 		(my-frame-unserialize-split (second (assoc 'tree data)) window)
 		(select-frame selected-frame)))
 
+;;;###autoload
 (defun my-frame-short-layout-info (&optional frame)
 	"Returns string with short FRAME layout info (concancenated edges).
 	Useful in debugging."
@@ -117,6 +120,7 @@
 					(number-to-string (fourth edges)))))
 		data))
 
+;;;###autoload
 (defun my-frame-reasonable-split (&optional frame)
 	"Split FRAME into reasonable number of windows.
 	Reasonable is that each window has at least 90 characters in width."

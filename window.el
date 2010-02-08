@@ -16,6 +16,7 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+;;;###autoload
 (defun my-window-serialize (&optional window)
 	"Serializes WINDOW characterstic to string.
 	Useful when we want to keep such configuration in file between sessions.
@@ -33,6 +34,7 @@
 			(list 'selected (eq window (selected-window)))
 			(list 'display (list (window-start window) (window-end window))))))
 
+;;;###autoload
 (defun my-window-unserialize (data &optional window)
 	"Unserializes WINDOW from DATA string (created by `my-window-unserialize').
 	If WINDOW is nil then current window is used."

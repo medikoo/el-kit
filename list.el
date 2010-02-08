@@ -16,6 +16,7 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+;;;###autoload
 (defun my-list-replace (list search replace)
 	"In given LIST Replaces all instances of SEARCH with REPLACE."
 	(let ((index -1) (length (length list)))
@@ -23,6 +24,7 @@
 			(if (eq search (nth index list))
 				(setf (nth index list) replace)))))
 
+;;;###autoload
 (defun my-list-set (list replace)
 	"Makes given LIST content same as in REPLACE list.
 	Useful when we don't want to create new object

@@ -16,10 +16,11 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+;;;###autoload
 (defun my-regexp-group (list)
-	"Returns regexp that is buld of strings in LIST.
-	Regexp will match any string found in a LIST.
-	This shortcut allows crating such regexps in more readable way."
+	"Return a regexp to match a string in the LIST of strings.
+	Similar to `regexp-opt' with that difference that for each string individual
+	group is created."
 	(concat "\\(" (mapconcat 'identity list "\\)\\|\\(") "\\)"))
 
 (provide 'my/regexp)

@@ -16,10 +16,12 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+;;;###autoload
 (defun my-edges-width (edges)
 	"Calculates width."
 	(- (third edges) (car edges)))
 
+;;;###autoload
 (defun my-edges-height (edges)
 	"Calulates height."
 	(- (fourth edges) (second edges)))

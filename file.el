@@ -16,6 +16,7 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+;;;###autoload
 (defun my-file-write (file content &optional nowarn)
 	"Writes CONTENT to FILE.
 	If NOWARN is nil signal an error on failure."
@@ -26,6 +27,7 @@
 		(if nowarn
 				nil (error "Could not write file"))))
 
+;;;###autoload
 (defun my-file-read (file &optional nowarn)
 	"Returns FILE content as string.
 	If NOWARN is nil singal an error on failure."
@@ -35,5 +37,15 @@
 			(buffer-string))
 		(if nowarn
 			nil (error "Could not read file"))))
+
+;; Copyright (C) 2008, 2009 Phil Hagelberg <technomacy@gmail.com>
+;; http://github.com/technomancy/emacs-starter-kit/blob/master/starter-kit-defuns.el
+;;;###autoload
+(defun my-file-recent-ido ()
+	"Find a recent file using ido."
+	(interactive)
+	(let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+		(when file
+			(find-file file))))
 
 (provide 'my/file)

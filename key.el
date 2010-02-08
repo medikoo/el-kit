@@ -22,6 +22,7 @@
 (defvar my-key-minibuffer-defaults (make-hash-table)
 	"Key binding mini buffer defaults")
 
+;;;###autoload
 (defun my-key-set (key command)
 	"Give KEY a global binding as COMMAND."
 	(when (not (gethash key my-key-defaults))
@@ -30,6 +31,7 @@
 	(global-set-key key command)
 	(define-key minibuffer-local-map key 'undefined))
 
+;;;###autoload
 (defun my-key-remove (key)
 	"Remove KEY current binding and revert to default binding."
 	(when (gethash key my-key-defaults)
@@ -38,6 +40,7 @@
 		(define-key minibuffer-local-map key (gethash my-key-minibuffer-defaults))
 		(remhash key my-key-minibuffer-defaults)))
 
+;;;###autoload
 (defun my-key-replace (oldkey newkey &optional command)
 	"Change OLDKEY command binding to NEWKEY binding."
 	(let ((command (or command (lookup-key global-map oldkey))))
