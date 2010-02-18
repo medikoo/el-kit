@@ -48,4 +48,11 @@
 		(when file
 			(find-file file))))
 
+;;;###autoload
+(defun my-file-modification-date-sort (a b)
+	"True if A was modified later than B.
+	To be used with `sort' function."
+	(> (float-time (nth 5 (file-attributes a)))
+		(float-time (nth 5 (file-attributes b)))))
+
 (provide 'my/file)

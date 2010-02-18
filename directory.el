@@ -1,4 +1,4 @@
-;; my/list.el --- list helpers
+;; my/directory.el --- directory operation helpers
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,27 +17,11 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-list-replace (list search replace)
-	"In given LIST Replaces all instances of SEARCH with REPLACE."
-	(let ((index -1) (length (length list)))
-		(while (< (setq index (+ index 1)) length)
-			(if (eq search (nth index list))
-				(setf (nth index list) replace)))))
+(defun my-directory-files-sorted (directory sort &optional full match)
+	"Return `directory-files' sorted with SORT function"
+	(let ((result (sort (directory-files directory t match) sort)))
+		(if full
+			result
+			(mapcar 'file-name-nondirectory result))))
 
-;;;###autoload
-(defun my-list-set (list replace)
-	"Makes given LIST content same as in REPLACE list.
-	Useful when we don't want to create new object
-	but keep references to existing one.
-	Returns LIST."
-	(setcar list (car replace))
-	(setcdr list (cdr replace))
-	list)
-
-;;;###autoload
-(defun my-list-move-first-to-end (list)
-	"First element of LIST becomes last."
-	(let ((first (pop list)))
-		(nconc list (list first))))
-
-(provide 'my/list)
+(provide 'my/directory)
