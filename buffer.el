@@ -132,12 +132,4 @@
 							(- (or (and (re-search-forward "[^ \t]" nil t) (current-column)) 1) 1)))
 					tab-width)))))
 
-;;;###autoload
-(defun my-buffer-insert-tab ()
-	"Insert tab character.
-	It is usually blocked by indent function rules
-	using   this function we can insert it directly."
-	(interactive)
-	(insert "	"))
-
 (provide 'my/buffer)
