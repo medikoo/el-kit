@@ -24,4 +24,12 @@
 			result
 			(mapcar 'file-name-nondirectory result))))
 
+;; Copyright (C) 2009 Xah Lee
+;; http://xahlee.org/emacs/modernization_elsip_copy_dir.html
+;;;###autoload
+(defun my-directory-copy (source destination)
+	"Copies directory recursively"
+	(require 'dired-aux)
+	(dired-copy-file-recursive source destination nil nil nil 'always))
+
 (provide 'my/directory)
