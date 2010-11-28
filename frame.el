@@ -86,8 +86,14 @@
 	(if (not frame)
 		(setq frame (window-frame (selected-window))))
 
-	(set-frame-width frame (second (assoc 'width data)))
-	(set-frame-height frame (second (assoc 'height data)))
+	(while (or
+			(not (eq (second (assoc 'width data)) (frame-parameter frame 'width)))
+			(not (eq (second (assoc 'height data)) (frame-parameter frame 'height))))
+		;; On Windows frame dimensions are setup with delay
+		;; to prevent errors we wait until they match
+		(set-frame-width frame (second (assoc 'width data)))
+		(set-frame-height frame (second (assoc 'height data)))
+		(redisplay t))
 	(let* (
 			(window (frame-first-window frame))
 			(selected-frame (window-frame (selected-window))))
