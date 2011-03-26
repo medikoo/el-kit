@@ -86,17 +86,19 @@
 	(if (not frame)
 		(setq frame (window-frame (selected-window))))
 
-	(let ((count 3))
-		(while (and
-				(>= (setq count (- count 1)) 0)
-				(or
-					(not (eq (second (assoc 'width data)) (frame-parameter frame 'width)))
-					(not (eq (second (assoc 'height data))
-							(frame-parameter frame 'height)))))
-			;; On Windows frame dimensions are setup second time
-			(set-frame-width frame (second (assoc 'width data)))
-			(set-frame-height frame (second (assoc 'height data)))
-			(redisplay t)))
+	(if window-system
+		(let ((count 3))
+			(while (and
+					(>= (setq count (- count 1)) 0)
+					(or
+						(not (eq (second (assoc 'width data)) (frame-parameter frame 'width)))
+						(not (eq (second (assoc 'height data))
+								(frame-parameter frame 'height)))))
+				;; On MS Windows we neet to resize frame at least twice to get it
+				;; resized
+			 (set-frame-width frame (second (assoc 'width data)))
+			 (set-frame-height frame (second (assoc 'height data)))
+			 (redisplay t))))
 	(let* (
 			(window (frame-first-window frame))
 			(selected-frame (window-frame (selected-window))))
