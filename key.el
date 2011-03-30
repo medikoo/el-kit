@@ -25,7 +25,7 @@
 ;;;###autoload
 (defun my-key-set (key command)
 	"Give KEY a global binding as COMMAND."
-	(when (not (gethash key my-key-defaults))
+	(unless (gethash key my-key-defaults)
 		(puthash key (lookup-key global-map key) my-key-defaults)
 		(puthash key (lookup-key minibuffer-local-map key) my-key-minibuffer-defaults))
 	(global-set-key key command)
