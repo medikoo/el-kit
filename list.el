@@ -19,10 +19,46 @@
 ;;;###autoload
 (defun my-list-replace (list search replace)
 	"In given LIST Replaces all instances of SEARCH with REPLACE."
-	(let ((index -1) (length (length list)))
-		(while (< (setq index (+ index 1)) length)
-			(if (eq search (nth index list))
-				(setf (nth index list) replace)))))
+	(unless (eq search replace)
+		(let (index)
+			(while (setq index  (my-list-index-of list search))
+				(setf (nth index list) replace))))
+	list)
+
+;;;###autoload
+(defun my-list-index-of (list needle)
+	"Return index of NEEDLE in given LIST."
+	(let ((index -1) (length (length list)) found)
+		(while (and (not found) (< (setq index (+ index 1)) length))
+			(if (eq needle (nth index list))
+				(setq found t)))
+		(if found index)))
+
+;;;###autoload
+(defun my-list-next (list needle &optional loop)
+	"Return LIST element that is next of NEEDLE.
+	If LOOP then return first if NEEDLE is last.
+	If NEEDLE not found return nil."
+	(let ((index (my-list-index-of list needle)))
+		(when index
+			(setq index (+ index 1))
+			(if (< index (length list))
+				(nth index list)
+				(if loop
+					(car list))))))
+
+;;;###autoload
+(defun my-list-previous (list needle &optional loop)
+	"Return LIST element that is previous of NEEDLE.
+	If LOOP then return last if NEEDLE is first.
+	If NEEDLE not found return nil."
+	(let ((index (my-list-index-of list needle)))
+		(when index
+			(setq index (- index 1))
+			(if (< index 0)
+				(if loop
+					(car (last list)))
+				(nth index list)))))
 
 ;;;###autoload
 (defun my-list-set (list replace)
