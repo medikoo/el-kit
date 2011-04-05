@@ -1,4 +1,4 @@
-;; my/regexp.el --- regexp helpers
+;; el-kit/regexp.el --- Custom regexp related functions
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,10 +17,10 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-regexp-group (list)
+(defun el-kit-regexp-group (list)
 	"Return a regexp to match a string in the LIST of strings.
 	Similar to `regexp-opt' with that difference that for each string individual
 	group is created."
 	(concat "\\(" (mapconcat 'identity list "\\)\\|\\(") "\\)"))
 
-(provide 'my/regexp)
+(provide 'el-kit/regexp)

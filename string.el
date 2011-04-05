@@ -1,4 +1,4 @@
-;; my/string.el --- general string helpers
+;; el-kit/string.el --- Cutom string related functions
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,7 +17,7 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-string-repeat (string n)
+(defun el-kit-string-repeat (string n)
 	"Repeat STRING N times"
 	(let ((newstr ""))
 		(while (> n 0)
@@ -25,4 +25,4 @@
 			(setq n (- n 1)))
 		newstr))
 
-(provide 'my/string)
+(provide 'el-kit/string)

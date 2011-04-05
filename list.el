@@ -1,4 +1,4 @@
-;; my/list.el --- list helpers
+;; el-kit/list.el --- Custom list related functions
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,16 +17,16 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-list-replace (list search replace)
+(defun el-kit-list-replace (list search replace)
 	"In given LIST Replaces all instances of SEARCH with REPLACE."
 	(unless (eq search replace)
 		(let (index)
-			(while (setq index  (my-list-index-of list search))
+			(while (setq index  (el-kit-list-index-of list search))
 				(setf (nth index list) replace))))
 	list)
 
 ;;;###autoload
-(defun my-list-index-of (list needle)
+(defun el-kit-list-index-of (list needle)
 	"Return index of NEEDLE in given LIST."
 	(let ((index -1) (length (length list)) found)
 		(while (and (not found) (< (setq index (+ index 1)) length))
@@ -35,11 +35,11 @@
 		(if found index)))
 
 ;;;###autoload
-(defun my-list-next (list needle &optional loop)
+(defun el-kit-list-next (list needle &optional loop)
 	"Return LIST element that is next of NEEDLE.
 	If LOOP then return first if NEEDLE is last.
 	If NEEDLE not found return nil."
-	(let ((index (my-list-index-of list needle)))
+	(let ((index (el-kit-list-index-of list needle)))
 		(when index
 			(setq index (+ index 1))
 			(if (< index (length list))
@@ -48,11 +48,11 @@
 					(car list))))))
 
 ;;;###autoload
-(defun my-list-previous (list needle &optional loop)
+(defun el-kit-list-previous (list needle &optional loop)
 	"Return LIST element that is previous of NEEDLE.
 	If LOOP then return last if NEEDLE is first.
 	If NEEDLE not found return nil."
-	(let ((index (my-list-index-of list needle)))
+	(let ((index (el-kit-list-index-of list needle)))
 		(when index
 			(setq index (- index 1))
 			(if (< index 0)
@@ -61,7 +61,7 @@
 				(nth index list)))))
 
 ;;;###autoload
-(defun my-list-set (list replace)
+(defun el-kit-list-set (list replace)
 	"Makes given LIST content same as in REPLACE list.
 	Useful when we don't want to create new object
 	but keep references to existing one.
@@ -71,9 +71,9 @@
 	list)
 
 ;;;###autoload
-(defun my-list-move-first-to-end (list)
+(defun el-kit-list-move-first-to-end (list)
 	"First element of LIST becomes last."
 	(let ((first (pop list)))
 		(nconc list (list first))))
 
-(provide 'my/list)
+(provide 'el-kit/list)

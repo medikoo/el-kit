@@ -1,4 +1,4 @@
-;; my/edges.el --- operations and calculations on edges list
+;; el-kit/edges.el --- Operations and calculations on edges list
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,13 +17,13 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-edges-width (edges)
+(defun el-kit-edges-width (edges)
 	"Calculates width."
 	(- (third edges) (car edges)))
 
 ;;;###autoload
-(defun my-edges-height (edges)
+(defun el-kit-edges-height (edges)
 	"Calulates height."
 	(- (fourth edges) (second edges)))
 
-(provide 'my/edges)
+(provide 'el-kit/edges)

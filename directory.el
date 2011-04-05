@@ -1,4 +1,4 @@
-;; my/directory.el --- directory operation helpers
+;; el-kit/directory.el --- Custom functions that helps dealing with directories
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,7 +17,7 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-directory-files-sorted (directory sort &optional full match)
+(defun el-kit-directory-files-sorted (directory sort &optional full match)
 	"Return `directory-files' sorted with SORT function"
 	(let ((result (sort (directory-files directory t match) sort)))
 		(if full
@@ -27,9 +27,9 @@
 ;; Copyright (C) 2009 Xah Lee
 ;; http://xahlee.org/emacs/modernization_elsip_copy_dir.html
 ;;;###autoload
-(defun my-directory-copy (source destination)
+(defun el-kit-directory-copy (source destination)
 	"Copies directory recursively"
 	(require 'dired-aux)
 	(dired-copy-file-recursive source destination nil nil nil 'always))
 
-(provide 'my/directory)
+(provide 'el-kit/directory)

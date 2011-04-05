@@ -1,4 +1,4 @@
-;; my/file.el --- file operation helpers
+;; el-kit/file.el --- Custom functions that operate of files
 
 ;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
 ;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
@@ -17,7 +17,7 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
-(defun my-file-write (file content &optional nowarn)
+(defun el-kit-file-write (file content &optional nowarn)
 	"Writes CONTENT to FILE.
 	If NOWARN is nil signal an error on failure."
 	(if (file-writable-p file)
@@ -28,7 +28,7 @@
 				nil (error "Could not write file"))))
 
 ;;;###autoload
-(defun my-file-read (file &optional nowarn)
+(defun el-kit-file-read (file &optional nowarn)
 	"Returns FILE content as string.
 	If NOWARN is nil singal an error on failure."
 	(if (file-readable-p file)
@@ -41,7 +41,7 @@
 ;; Copyright (C) 2008, 2009 Phil Hagelberg <technomacy@gmail.com>
 ;; http://github.com/technomancy/emacs-starter-kit/blob/master/starter-kit-defuns.el
 ;;;###autoload
-(defun my-file-recent-ido ()
+(defun el-kit-file-recent-ido ()
 	"Find a recent file using ido."
 	(interactive)
 	(let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
@@ -49,10 +49,10 @@
 			(find-file file))))
 
 ;;;###autoload
-(defun my-file-modification-date-sort (a b)
+(defun el-kit-file-modification-date-sort (a b)
 	"True if A was modified later than B.
 	To be used with `sort' function."
 	(> (float-time (nth 5 (file-attributes a)))
 		(float-time (nth 5 (file-attributes b)))))
 
-(provide 'my/file)
+(provide 'el-kit/file)
