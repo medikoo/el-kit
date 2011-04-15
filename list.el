@@ -61,6 +61,20 @@
 				(nth index list)))))
 
 ;;;###autoload
+(defun el-kit-list-stats-count (list &optional dosort)
+	"Calculates how many times each LIST element occurs in LIST.
+	Returns cons in which car is element found in LIST and cdr is its count.
+	Optionally result can be sorted by count."
+	(let (result)
+		(while list
+			(setq result (nconc result (list (cons (car list)
+							(- (length list) (length (setq list (delq (car list) list)))))))))
+		(if dosort
+			(sort result (lambda (cons1 cons2)
+					(> (cdr cons1) (cdr cons2))))
+			result)))
+
+;;;###autoload
 (defun el-kit-list-set (list replace)
 	"Makes given LIST content same as in REPLACE list.
 	Useful when we don't want to create new object

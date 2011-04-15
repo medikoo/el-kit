@@ -16,6 +16,8 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+(require 'el-kit/list nil t)
+
 ;;;###autoload
 (defun el-kit-file-write (file content &optional nowarn)
 	"Writes CONTENT to FILE.
@@ -38,6 +40,20 @@
 		(if nowarn
 			nil (error "Could not read file"))))
 
+;;;###autoload
+(defun el-kit-file-list-extension-stats (filelist &optional dosort)
+	"Detect most common file extensions in given LIST.
+	Return association list where each cons is extension and count number.
+	If DOSORT, list is sorted by count."
+	(el-kit-list-stats-count (mapcar (lambda (filename)
+				(intern (file-name-extension filename)))
+			list) dosort))
+
+;;;###autoload
+(defun el-kit-file-name-nondirectory-sans-extension (filename)
+	"Returns FILENAME base name."
+	(file-name-sans-extension (file-name-nondirectory filename)))
+
 ;; Copyright (C) 2008, 2009 Phil Hagelberg <technomacy@gmail.com>
 ;; http://github.com/technomancy/emacs-starter-kit/blob/master/starter-kit-defuns.el
 ;;;###autoload
@@ -49,10 +65,20 @@
 			(find-file file))))
 
 ;;;###autoload
+(defun el-kit-file-access-date-sort (a b)
+	"True if A was accessed later than B.
+	To be used with `sort' function."
+	(> (float-time (nth 4 (file-attributes a)))
+		(float-time (nth 4 (file-attributes b)))))
+
+;;;###autoload
 (defun el-kit-file-modification-date-sort (a b)
 	"True if A was modified later than B.
 	To be used with `sort' function."
 	(> (float-time (nth 5 (file-attributes a)))
 		(float-time (nth 5 (file-attributes b)))))
+
+;;;###autoload
+(defalias 'el-kit-file-name-sort 'string<)
 
 (provide 'el-kit/file)
