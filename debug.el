@@ -1,7 +1,7 @@
 ;; el-kit/debug.el --- Custom functions that helps with development
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
+;; Author:	Mariusz Nowak <medikoo+el-kit@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <medikoo+el-kit@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

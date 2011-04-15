@@ -1,7 +1,7 @@
 ;; el-kit/directory.el --- Custom functions that helps dealing with directories
 
-;; Author:	Mariusz Nowak <mariusz+emacs.my@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <mariusz+emacs.my@medikoo.com>
+;; Author:	Mariusz Nowak <medikoo+el-kit@medikoo.com>
+;; Copyright (C) 2010 Mariusz Nowak <medikoo+el-kit@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
