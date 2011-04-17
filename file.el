@@ -47,7 +47,7 @@
 	If DOSORT, list is sorted by count."
 	(el-kit-list-stats-count (mapcar (lambda (filename)
 				(intern (file-name-extension filename)))
-			list) dosort))
+			filelist) dosort))
 
 ;;;###autoload
 (defun el-kit-file-name-nondirectory-sans-extension (filename)
