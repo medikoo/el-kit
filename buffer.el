@@ -129,7 +129,19 @@
 					(if (looking-at "[^ \t]")
 						(current-column)
 						(save-excursion
-							(- (or (and (re-search-forward "[^ \t]" nil t) (current-column)) 1) 1)))
+							(- (or (and
+										(re-search-forward "[^ \t]" nil t) (current-column)) 1) 1)))
 					tab-width)))))
+
+;;;###autoload
+(defun el-kit-buffer-first-nonwhitespace-pos ()
+	"Return position of first non whitespace character in buffer."
+	(save-excursion
+		(goto-char (point-min))
+		(back-to-indentation)
+		(while (eolp)
+			(next-line)
+			(back-to-indentation))
+		(point)))
 
 (provide 'el-kit/buffer)
