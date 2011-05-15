@@ -61,9 +61,6 @@
 	"Clean buffer whitespace incosistencies."
 	(interactive)
 	(el-kit-buffer-indent)
-	(if (eq indent-tabs-mode nil)
-		(el-kit-buffer-untabify)
-		(el-kit-buffer-tabify))
 	(delete-trailing-whitespace))
 
 ;;;###autoload
