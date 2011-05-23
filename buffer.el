@@ -60,8 +60,11 @@
 (defun el-kit-buffer-whitespace-cleanup ()
 	"Clean buffer whitespace incosistencies."
 	(interactive)
-	(el-kit-buffer-indent)
-	(delete-trailing-whitespace))
+	(if (eq indent-tabs-mode nil)
+		(el-kit-buffer-untabify)
+		(el-kit-buffer-tabify))
+	(delete-trailing-whitespace)
+	(el-kit-buffer-indent))
 
 ;;;###autoload
 (defun el-kit-buffer-print-file-name ()
