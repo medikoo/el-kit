@@ -1,7 +1,7 @@
 ;; el-kit/string.el --- Cutom string related functions
 
 ;; Author:	Mariusz Nowak <medikoo+el-kit@medikoo.com>
-;; Copyright (C) 2010 Mariusz Nowak <medikoo+el-kit@medikoo.com>
+;; Copyright (C) 2010, 2011 Mariusz Nowak <medikoo+el-kit@medikoo.com>
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -24,5 +24,25 @@
 			(setq newstr (concat newstr string))
 			(setq n (- n 1)))
 		newstr))
+
+;;;###autoload
+(defun el-kit-string-index-of (haystack needle)
+	"Return the index of the first occurrenc of NEEDLE within HAYSTACK."
+	(with-temp-buffer
+		(insert haystack)
+		(goto-char 0)
+		(let ((index (search-forward needle nil t)))
+			(if index
+				(- index (length needle) 1)))))
+
+;;;###autoload
+(defun el-kit-string-last-index-of (haystack needle)
+	"Return the index of the last occurrenc of NEEDLE within HAYSTACK."
+	(with-temp-buffer
+		(insert haystack)
+		(goto-char (point-max))
+		(let ((index (search-backward needle nil t)))
+			(if index
+				(- index (length needle))))))
 
 (provide 'el-kit/string)
