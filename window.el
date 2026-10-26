@@ -17,6 +17,8 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
+(require 'cl-lib)
+
 (defun el-kit-window-serialize (&optional window)
 	"Serializes WINDOW characterstic to string.
 	Useful when we want to keep such configuration in file between sessions.
@@ -42,12 +44,12 @@
 		(setq window (selected-window)))
 	(set-window-buffer window
 		(or
-			(if (second (assoc 'buffer-file-name data))
-				(find-file-noselect (second (assoc 'buffer-file-name data)))
-				(get-buffer (second (assoc 'buffer-name data))))
+			(if (cl-second (assoc 'buffer-file-name data))
+				(find-file-noselect (cl-second (assoc 'buffer-file-name data)))
+				(get-buffer (cl-second (assoc 'buffer-name data))))
 			(get-buffer "*scratch*")
 			(current-buffer)))
-	(set-window-point window (second (assoc 'point data)))
-	(set-window-start window (car (second (assoc 'display data)))))
+	(set-window-point window (cl-second (assoc 'point data)))
+	(set-window-start window (car (cl-second (assoc 'display data)))))
 
 (provide 'el-kit/window)

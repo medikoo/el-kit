@@ -16,6 +16,7 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+(require 'cl-lib)
 (require 'el-kit/window nil t)
 (require 'el-kit/edges nil t)
 
@@ -53,12 +54,12 @@
 		(if (or (not (car split)) (eq t (car split)))
 			(progn
 				(ignore-errors (enlarge-window
-						(- (el-kit-edges-height (second split))
+						(- (el-kit-edges-height (cl-second split))
 							(el-kit-edges-height edges))))
 				(ignore-errors (enlarge-window-horizontally
-						(- (el-kit-edges-width (second split))
+						(- (el-kit-edges-width (cl-second split))
 							(el-kit-edges-width edges))))
-				(nconc queue (list (list (third split) window)))
+				(nconc queue (list (list (cl-third split) window)))
 				(while (< index length)
 					(setq window (split-window window nil (not (car split))))
 					(nconc queue (list (list (nth index split) window)))
@@ -67,16 +68,16 @@
 					(progn
 						(pop queue)
 						(dolist (data queue)
-							(select-window (second data))
-							(el-kit-frame-unserialize-split (car data) (second data))))))
+							(select-window (cl-second data))
+							(el-kit-frame-unserialize-split (car data) (cl-second data))))))
 			(ignore-errors (enlarge-window
-					(- (el-kit-edges-height (second (assoc 'edges split)))
+					(- (el-kit-edges-height (cl-second (assoc 'edges split)))
 						(el-kit-edges-height edges))))
 			(ignore-errors (enlarge-window-horizontally
-					(- (el-kit-edges-width (second (assoc 'edges split)))
+					(- (el-kit-edges-width (cl-second (assoc 'edges split)))
 						(el-kit-edges-width edges))))
 			(el-kit-window-unserialize split window)
-			(if (second (assoc 'selected split))
+			(if (cl-second (assoc 'selected split))
 				(select-window window)))))
 
 ;;;###autoload
@@ -91,20 +92,20 @@
 			(while (and
 					(>= (setq count (- count 1)) 0)
 					(or
-						(not (eq (second (assoc 'width data)) (frame-parameter frame 'width)))
-						(not (eq (second (assoc 'height data))
+						(not (eq (cl-second (assoc 'width data)) (frame-parameter frame 'width)))
+						(not (eq (cl-second (assoc 'height data))
 								(frame-parameter frame 'height)))))
 				;; On MS Windows we neet to resize frame at least twice to get it
 				;; resized
-			 (set-frame-width frame (second (assoc 'width data)))
-			 (set-frame-height frame (second (assoc 'height data)))
+			 (set-frame-width frame (cl-second (assoc 'width data)))
+			 (set-frame-height frame (cl-second (assoc 'height data)))
 			 (redisplay t))))
 	(let* (
 			(window (frame-first-window frame))
 			(selected-frame (window-frame (selected-window))))
 		(select-frame frame)
 		(delete-other-windows window)
-		(el-kit-frame-unserialize-split (second (assoc 'tree data)) window)
+		(el-kit-frame-unserialize-split (cl-second (assoc 'tree data)) window)
 		(select-frame selected-frame)))
 
 ;;;###autoload
@@ -119,16 +120,16 @@
 			(edges (window-edges window))
 			(data (concat
 					(number-to-string (car edges)) "-"
-					(number-to-string (second edges)) "-"
-					(number-to-string (third edges)) "-"
-					(number-to-string (fourth edges)))))
+					(number-to-string (cl-second edges)) "-"
+					(number-to-string (cl-third edges)) "-"
+					(number-to-string (cl-fourth edges)))))
 		(while (not (eq (setq window (next-window window)) first-window))
 			(setq edges (window-edges window))
 			(setq data (concat data "|"
 					(number-to-string (car edges)) "-"
-					(number-to-string (second edges)) "-"
-					(number-to-string (third edges)) "-"
-					(number-to-string (fourth edges)))))
+					(number-to-string (cl-second edges)) "-"
+					(number-to-string (cl-third edges)) "-"
+					(number-to-string (cl-fourth edges)))))
 		data))
 
 ;;;###autoload

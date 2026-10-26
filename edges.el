@@ -17,13 +17,15 @@
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 ;;;###autoload
+(require 'cl-lib)
+
 (defun el-kit-edges-width (edges)
 	"Calculates width."
-	(- (third edges) (car edges)))
+	(- (cl-third edges) (car edges)))
 
 ;;;###autoload
 (defun el-kit-edges-height (edges)
 	"Calulates height."
-	(- (fourth edges) (second edges)))
+	(- (cl-fourth edges) (cl-second edges)))
 
 (provide 'el-kit/edges)

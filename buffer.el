@@ -16,6 +16,7 @@
 ;; You should have received a copy of the GNU General Public
 ;; License along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+(declare-function dired-do-rename "dired-aux")
 (require 'el-kit/string nil t)
 
 ;; Copyright (C) 2008, 2009 Phil Hagelberg <technomacy@gmail.com>
